@@ -12,6 +12,12 @@ const { ConnectedRouter } = require('connected-react-router');
 const { ErrorBoundary } = require('react-error-boundary');
 const ErrorFallback = require('./components/ErrorFallback');
 const Routes = require('./routes');
+const { default: Memoize } = require('memoize-one');
+const Memoize2 = require('memoize-one');
+
+console.log('Memoize', Memoize);
+console.log('Memoize2', Memoize2);
+Memoize();
 
 module.exports = ({ middleEnd, theme = CreateMuiTheme(), Router = ConnectedRouter, ...routerProps }) => {
 
