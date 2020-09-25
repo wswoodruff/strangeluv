@@ -13,6 +13,7 @@ module.exports = () => {
         <HomepageContainer>
             <WelcomeMessage>Welcome!</WelcomeMessage>
             <Typography>I'm just a simple line change in a tiny commit, do I end up on prod if merged?</Typography>
+            <Typography>You sure do buddy!</Typography>
             <Image
                 alt='This is a duck, because Redux!'
                 src={DuckImage}
