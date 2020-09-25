@@ -1,36 +1,17 @@
-name: code push test runner
-on: push
+name: master merge test and deployment
+on:
+  push:
+    branches:
+      # Push events on master branch
+      - master
 
 jobs:
   # Label of the container job; visible on Github Actions UI
-  testing-harness:
+  ci-cd-pipeline:
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
     # Docker Hub image that `testing-harness` executes in
     container: node:14
-
-    # # ========= UNCOMMENT FOR POSTGRES DB =========
-    # # Service containers to run with `testing-harness`
-    # services:
-    #   # Keys here are used to access these service containers for networking.
-    #   # The example env var for DB_HOST will be set to 'postgres-service'.
-    #   postgres-service:
-    #     # Docker Hub image
-    #     image: postgres
-    #     # Provide the password for postgres
-    #     env:
-    #       POSTGRES_PASSWORD: postgres
-    #       POSTGRES_USER: postgres
-    #       POSTGRES_DB: test-db
-    #     # Set health checks to wait until postgres has started
-    #     options: >-
-    #       --health-cmd pg_isready
-    #       --health-interval 10s
-    #       --health-timeout 5s
-    #       --health-retries 5
-    #     ports:
-    #       # Maps tcp port 5432 on service container to the host
-    #       - 5432:5432
 
     steps:
       # # ========= UNCOMMENT TO INSTALL C LIBS =========
@@ -81,3 +62,28 @@ jobs:
 
           # Logging
           # LOG_ROOT_PATH: /app/logs
+      - name: Build the app
+        if: ${{success()}}
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Configure AWS Credentials for deployment
+        if: ${{success()}}
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: us-east-1
+
+      - name: Install cdk cli via npm
+        if: ${{success()}}
+        run: npm install -g aws-cdk
+
+      - name: Bootstrap cdk
+        if: ${{success()}}
+        run: cdk bootstrap --require-approval never
+
+      - name: Deploy static site to CloudFront
+        if: ${{success()}}
+        run: cdk deploy --require-approval never
