@@ -97,8 +97,8 @@ jobs:
 
       - name: Bootstrap cdk
         if: ${{success()}}
-        run: cdk bootstrap -y
+        run: cdk bootstrap --require-approval never
 
       - name: Deploy static site to cloudfront
         if: ${{success()}}
-        run: cdk deploy -y
+        run: cdk deploy --require-approval never
