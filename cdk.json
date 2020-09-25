@@ -1,0 +1,8 @@
+{
+    "app": "node ./cdk/index",
+    "context": {
+        "account": "502108734486",
+        "domain": "suckaaa.com",
+        "subdomain": "sl-gh-ci-cd-demo"
+    }
+}
