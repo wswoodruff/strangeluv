@@ -2,8 +2,7 @@ name: master merge test and deployment
 on:
   push:
     branches:
-      # Push events on master branch
-      - master
+      - strangeluv
 
 jobs:
   # Label of the container job; visible on Github Actions UI
