@@ -95,6 +95,10 @@ jobs:
           aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
           aws-region: us-east-1
 
+      - name: Install cdk cli via npm
+        if: ${{success()}}
+        run: npm install -g aws-cdk
+
       - name: Bootstrap cdk
         if: ${{success()}}
         run: cdk bootstrap --require-approval never
